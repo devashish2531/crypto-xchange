@@ -5,8 +5,14 @@ import { CryptoDetailsComponent } from './crypto-details/crypto-details.componen
 import { CryptoTableComponent } from './crypto-table/crypto-table.component';
 
 const routes: Routes = [
-  { path: '', component: CryptoTableComponent },
-  { path: 'details/:id', component: CryptoDetailsComponent },
+  { path: '', redirectTo: 'cryptoxchange', pathMatch: 'full' },
+  {
+    path: 'cryptoxchange',
+    loadChildren: () =>
+      import('./cryptoxchange/cryptoxchange.module').then(
+        (m) => m.CryptoxchangeModule
+      ),
+  },
 ];
 
 @NgModule({

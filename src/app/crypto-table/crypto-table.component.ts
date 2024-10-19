@@ -3,6 +3,7 @@ import { CryptoService } from '../services/crypto.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { LocalStorageService } from '../services/local-storage.service';
 
 interface Cryptocurrency {
   id: string;
@@ -31,7 +32,11 @@ export class CryptoTableComponent implements OnInit, OnDestroy {
 
   private priceUpdatesSubscription: Subscription = new Subscription();
 
-  constructor(private cryptoService: CryptoService, private router: Router) {}
+  constructor(
+    private cryptoService: CryptoService,
+    private router: Router,
+    private localStorageService: LocalStorageService
+  ) {}
 
   ngOnInit() {
     this.loadCryptocurrencies();
@@ -64,6 +69,7 @@ export class CryptoTableComponent implements OnInit, OnDestroy {
   }
 
   subscribeToPriceUpdates() {
+    let timerId: ReturnType<typeof setTimeout>;
     this.priceUpdatesSubscription = this.cryptoService
       .getPriceUpdates()
       .subscribe((updates: any) => {
@@ -89,9 +95,9 @@ export class CryptoTableComponent implements OnInit, OnDestroy {
 
               // Update the price
               crypto.priceUsd = newPrice as string;
-
+              if (timerId) clearTimeout(timerId);
               // Clear the message after 5 seconds
-              setTimeout(() => {
+              timerId = setTimeout(() => {
                 this.globalPriceUpdateMessage = '';
               }, 5000);
             }
@@ -145,7 +151,9 @@ export class CryptoTableComponent implements OnInit, OnDestroy {
   }
 
   isFavorite(id: string): boolean {
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const favorites = JSON.parse(
+      this.localStorageService.getItem('favorites') || '[]'
+    );
     return favorites.includes(id);
   }
 
@@ -153,10 +161,11 @@ export class CryptoTableComponent implements OnInit, OnDestroy {
     const favorites = this.cryptocurrencies
       .filter((c) => c.isFavorite)
       .map((c) => c.id);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
+
+    this.localStorageService.setItem('favorites', JSON.stringify(favorites));
   }
 
   goToDetails(id: string) {
-    this.router.navigate(['/details', id]);
+    this.router.navigate(['/cryptoxchange/details', id]);
   }
 }

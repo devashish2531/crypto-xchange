@@ -1,24 +1,12 @@
-<header class="bg-white shadow-md sticky top-0 z-10 mb-6">
-  <div class="flex justify-center items-center py-4">
-    <!-- Clickable Logo -->
-    <a
-      routerLink="/"
-      class="text-2xl font-bold text-blue-600 hover:text-blue-800"
-    >
-      CryptoXchange
-    </a>
-  </div>
-  <div class="border-b border-gray-300"></div>
-</header>
-<div class="container mx-auto">
-  <header class="text-center mb-6">
-    <h1 class="text-4xl font-bold">Crypto Xchange</h1>
-    <p class="text-gray-600 text-lg">
-      Real-time prices and market data for top cryptocurrencies
-    </p>
+<div class="text-center mb-6">
+  <h1 class="text-4xl font-bold">Crypto Xchange</h1>
+  <p class="text-gray-600 text-lg mt-2">
+    Real-time prices and market data for top cryptocurrencies
+  </p>
+  <div class="p-2 min-h-[50px]">
     <div
       *ngIf="globalPriceUpdateMessage"
-      class="global-price-message mt-2 text-lg"
+      class="global-price-message mt-2 text-lg min-w-[300px]"
       [ngClass]="{
         'bg-green-200 text-green-800': isPriceIncreased,
         'bg-red-200 text-red-800': !isPriceIncreased
@@ -26,72 +14,95 @@
     >
       {{ globalPriceUpdateMessage }}
     </div>
-  </header>
+  </div>
+</div>
 
-  <main>
-    <table class="min-w-full bg-white border border-gray-200">
-      <thead>
-        <tr class="bg-gray-100">
-          <th
-            class="py-2 px-4 text-left cursor-pointer"
-            (click)="onSort('symbol')"
-          >
-            Symbol ⇅
-          </th>
-          <th
-            class="py-2 px-4 text-left cursor-pointer"
-            (click)="onSort('name')"
-          >
-            Name ⇅
-          </th>
-          <th class="py-2 px-4 text-right">Price (USD)</th>
-          <th class="py-2 px-4 text-right">Market Cap (USD)</th>
-          <th class="py-2 px-4 text-center">Favorite</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let crypto of paginatedCryptocurrencies"
-          class="hover:bg-gray-50"
+<!-- Responsive Table -->
+<div class="overflow-x-auto">
+  <table class="min-w-full bg-white border border-gray-200 hidden md:table">
+    <thead>
+      <tr class="bg-gray-100">
+        <th
+          class="py-2 px-4 text-left cursor-pointer"
+          (click)="onSort('symbol')"
         >
-          <td class="py-2 px-4">{{ crypto.symbol }}</td>
-          <td
-            (click)="goToDetails(crypto.id)"
-            class="py-2 px-4 text-blue-500 cursor-pointer"
-          >
-            {{ crypto.name }}
-          </td>
-          <td class="py-2 px-4 text-right">
-            {{ crypto.priceUsd | currency : "USD" : "symbol" : "1.2-2" }}
-          </td>
-          <td class="py-2 px-4 text-right">
-            {{ crypto.marketCapUsd | currency : "USD" : "symbol" : "1.0-0" }}
-          </td>
-          <td class="py-2 px-4 text-center">
-            <button (click)="toggleFavorite(crypto)" class="favorite-btn">
-              {{ crypto.isFavorite ? "★" : "☆" }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          Symbol ⇅
+        </th>
+        <th class="py-2 px-4 text-left cursor-pointer" (click)="onSort('name')">
+          Name ⇅
+        </th>
+        <th class="py-2 px-4 text-right">Price (USD)</th>
+        <th class="py-2 px-4 text-right">Market Cap (USD)</th>
+        <th class="py-2 px-4 text-center">Favorite</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let crypto of paginatedCryptocurrencies"
+        class="hover:bg-gray-50"
+      >
+        <td class="py-2 px-4">{{ crypto.symbol }}</td>
+        <td
+          (click)="goToDetails(crypto.id)"
+          class="py-2 px-4 text-blue-500 cursor-pointer"
+        >
+          {{ crypto.name }}
+        </td>
+        <td class="py-2 px-4 text-right">
+          {{ crypto.priceUsd | currency : "USD" : "symbol" : "1.2-2" }}
+        </td>
+        <td class="py-2 px-4 text-right">
+          {{ crypto.marketCapUsd | currency : "USD" : "symbol" : "1.0-0" }}
+        </td>
+        <td class="py-2 px-4 text-center">
+          <button (click)="toggleFavorite(crypto)" class="favorite-btn">
+            {{ crypto.isFavorite ? "★" : "☆" }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    <div class="pagination flex justify-between items-center mt-4">
-      <button
-        (click)="onPageChange(currentPage - 1)"
-        [disabled]="currentPage === 1"
-        class="page-btn bg-blue-500 text-white py-1 px-3 rounded disabled:opacity-50"
-      >
-        Previous
-      </button>
-      <span class="page-info">Page {{ currentPage }}</span>
-      <button
-        (click)="onPageChange(currentPage + 1)"
-        [disabled]="currentPage * itemsPerPage >= cryptocurrencies.length"
-        class="page-btn bg-blue-500 text-white py-1 px-3 rounded disabled:opacity-50"
-      >
-        Next
+  <!-- Card Layout for Mobile -->
+  <div class="md:hidden">
+    <div
+      *ngFor="let crypto of paginatedCryptocurrencies"
+      class="bg-white border border-gray-200 rounded-lg p-4 mb-4"
+    >
+      <h2 class="text-xl font-semibold">
+        {{ crypto.name }} ({{ crypto.symbol }})
+      </h2>
+      <p class="text-gray-700">
+        Price: {{ crypto.priceUsd | currency : "USD" : "symbol" : "1.2-2" }}
+      </p>
+      <p class="text-gray-700">
+        Market Cap:
+        {{ crypto.marketCapUsd | currency : "USD" : "symbol" : "1.0-0" }}
+      </p>
+      <button (click)="toggleFavorite(crypto)" class="favorite-btn text-lg">
+        {{ crypto.isFavorite ? "★" : "☆" }}
       </button>
     </div>
-  </main>
+  </div>
+</div>
+
+<!-- Pagination -->
+<div
+  class="pagination flex flex-col md:flex-row justify-between items-center mt-4"
+>
+  <button
+    (click)="onPageChange(currentPage - 1)"
+    [disabled]="currentPage === 1"
+    class="page-btn bg-blue-500 text-white py-1 px-3 rounded disabled:opacity-50"
+  >
+    Previous
+  </button>
+  <span class="page-info mt-2 md:mt-0">Page {{ currentPage }}</span>
+  <button
+    (click)="onPageChange(currentPage + 1)"
+    [disabled]="currentPage * itemsPerPage >= cryptocurrencies.length"
+    class="page-btn bg-blue-500 text-white py-1 px-3 rounded disabled:opacity-50"
+  >
+    Next
+  </button>
 </div>

@@ -13,6 +13,7 @@ import { CryptoService } from '../services/crypto.service';
 import { registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { BehaviorSubject, Subject, combineLatest, takeUntil } from 'rxjs';
+import { LocalStorageService } from '../services/local-storage.service';
 
 Chart.register(...registerables);
 
@@ -29,6 +30,7 @@ export class CryptoDetailsComponent
   @ViewChild('priceChart') priceChartCanvas!: ElementRef; // Added non-null assertion operator
   cryptoDetails: any;
   chart: Chart | undefined;
+  isFavorite: boolean = false; // To track if the current crypto is a favorite
 
   private priceData$ = new BehaviorSubject<any[]>([]);
   private viewReady$ = new BehaviorSubject<boolean>(false);
@@ -36,13 +38,15 @@ export class CryptoDetailsComponent
 
   constructor(
     private route: ActivatedRoute,
-    private cryptoService: CryptoService
+    private cryptoService: CryptoService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
       const id = params['id'];
       this.loadCryptoDetails(id);
+      this.checkIfFavorite(id);
     });
 
     combineLatest([this.priceData$, this.viewReady$])
@@ -119,4 +123,34 @@ export class CryptoDetailsComponent
       },
     });
   }
+
+  checkIfFavorite(id: string) {
+    const favorites = JSON.parse(
+      this.localStorageService.getItem('favorites') || '[]'
+    );
+
+    this.isFavorite = favorites?.includes(id) || false;
+  }
+
+  toggleFavourite() {
+    const favorites = JSON.parse(
+      this.localStorageService.getItem('favorites') || '[]'
+    );
+    const index = favorites.indexOf(this.cryptoDetails.id);
+
+    if (index === -1) {
+      // Add to favorites
+      favorites.push(this.cryptoDetails.id);
+      this.isFavorite = true;
+    } else {
+      // Remove from favorites
+      favorites.splice(index, 1);
+      this.isFavorite = false;
+    }
+
+    // Save the updated favorites list to local storage
+    this.localStorageService.setItem('favorites', JSON.stringify(favorites));
+  }
+
+  addFavourite() {}
 }
