@@ -1,9 +1,19 @@
 <div class="container">
   <header>
-    <h1>Cryptocurrency Dashboard</h1>
+    <h1>Crypto Xchange</h1>
     <p class="subtitle">
       Real-time prices and market data for top cryptocurrencies
     </p>
+    <div
+      *ngIf="globalPriceUpdateMessage"
+      class="global-price-message"
+      [ngClass]="{
+        'price-increase': isPriceIncreased,
+        'price-decrease': !isPriceIncreased
+      }"
+    >
+      {{ globalPriceUpdateMessage }}
+    </div>
   </header>
 
   <main>

@@ -23,6 +23,9 @@ export class CryptoTableComponent implements OnInit, OnDestroy {
   itemsPerPage = 10;
   sortColumn = 'symbol';
   sortDirection = 'asc';
+  globalPriceUpdateMessage = ''; // Global message for price updates
+  isPriceIncreased = true; // Flag to track if price increased or decreased
+
   private priceUpdatesSubscription: Subscription = new Subscription();
 
   constructor(private cryptoService: CryptoService, private router: Router) {}
@@ -61,13 +64,34 @@ export class CryptoTableComponent implements OnInit, OnDestroy {
     this.priceUpdatesSubscription = this.cryptoService
       .getPriceUpdates()
       .subscribe((updates: any) => {
-        console.log(updates);
-        Object.entries(updates).forEach(([symbol, price]) => {
+        Object.entries(updates).forEach(([symbol, newPrice]) => {
           const index = this.cryptocurrencies.findIndex(
             (c) => c.symbol.toLowerCase() === symbol
           );
           if (index !== -1) {
-            this.cryptocurrencies[index].priceUsd = price as string;
+            const crypto = this.cryptocurrencies[index];
+            const previousPrice = parseFloat(crypto.priceUsd);
+            const updatedPrice = parseFloat(newPrice as string);
+
+            if (previousPrice !== updatedPrice) {
+              // Determine if the price increased or decreased
+              this.isPriceIncreased = updatedPrice > previousPrice;
+
+              // Set the global price update message
+              this.globalPriceUpdateMessage = `${
+                crypto.name
+              } (${crypto.symbol.toUpperCase()}): Price ${
+                this.isPriceIncreased ? 'increased' : 'decreased'
+              } from ${previousPrice} to ${updatedPrice}`;
+
+              // Update the price
+              crypto.priceUsd = newPrice as string;
+
+              // Clear the message after 5 seconds
+              setTimeout(() => {
+                this.globalPriceUpdateMessage = '';
+              }, 5000);
+            }
           }
         });
       });
