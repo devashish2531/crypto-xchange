@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Chart } from 'chart.js';
 import { CryptoService } from '../services/crypto.service';
 import { registerables } from 'chart.js';
@@ -19,7 +19,7 @@ Chart.register(...registerables);
 @Component({
   selector: 'app-crypto-details',
   standalone: true,
-  imports: [CommonModule, CurrencyPipe],
+  imports: [CommonModule, CurrencyPipe, RouterModule],
   templateUrl: './crypto-details.component.html',
   styleUrls: ['./crypto-details.component.scss'],
 })
@@ -43,7 +43,6 @@ export class CryptoDetailsComponent
     this.route.params.subscribe((params) => {
       const id = params['id'];
       this.loadCryptoDetails(id);
-      this.loadCryptoHistory(id);
     });
 
     combineLatest([this.priceData$, this.viewReady$])
@@ -71,21 +70,19 @@ export class CryptoDetailsComponent
     this.cryptoService.getCryptoDetails(id).subscribe(
       (data: any) => {
         this.cryptoDetails = data.data;
+
+        this.cryptoService.getCryptoHistory(id).subscribe(
+          (data: any) => {
+            const priceData = data.data.map((item: any) => ({
+              x: new Date(item.time),
+              y: parseFloat(item.priceUsd),
+            }));
+            this.priceData$.next(priceData);
+          },
+          (error) => console.error('Error fetching crypto history:', error)
+        );
       },
       (error) => console.error('Error fetching crypto details:', error)
-    );
-  }
-
-  loadCryptoHistory(id: string) {
-    this.cryptoService.getCryptoHistory(id).subscribe(
-      (data: any) => {
-        const priceData = data.data.map((item: any) => ({
-          x: new Date(item.time),
-          y: parseFloat(item.priceUsd),
-        }));
-        this.priceData$.next(priceData);
-      },
-      (error) => console.error('Error fetching crypto history:', error)
     );
   }
 

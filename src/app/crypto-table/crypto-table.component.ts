@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CryptoService } from '../services/crypto.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 interface Cryptocurrency {
   id: string;
@@ -13,6 +14,8 @@ interface Cryptocurrency {
 }
 
 @Component({
+  standalone: true,
+  imports: [CommonModule],
   selector: 'app-crypto-table',
   templateUrl: './crypto-table.component.html',
   styleUrls: ['./crypto-table.component.scss'],
