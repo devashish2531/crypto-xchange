@@ -1,0 +1,20 @@
+<div *ngIf="cryptoDetails">
+  <h1>{{ cryptoDetails.name }} ({{ cryptoDetails.symbol }})</h1>
+  <p>
+    Current Price:
+    {{ cryptoDetails.priceUsd | currency : "USD" : "symbol" : "1.2-2" }}
+  </p>
+  <p>
+    Market Cap:
+    {{ cryptoDetails.marketCapUsd | currency : "USD" : "symbol" : "1.0-0" }}
+  </p>
+  <p>
+    24h Volume:
+    {{ cryptoDetails.volumeUsd24Hr | currency : "USD" : "symbol" : "1.0-0" }}
+  </p>
+  <p>Supply: {{ cryptoDetails.supply | number : "1.0-0" }}</p>
+  <p>Max Supply: {{ cryptoDetails.maxSupply | number : "1.0-0" }}</p>
+
+  <h2>Price History (Last 30 Days)</h2>
+</div>
+<canvas #priceChart></canvas>

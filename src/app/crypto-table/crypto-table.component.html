@@ -1,0 +1,57 @@
+<div class="container">
+  <header>
+    <h1>Cryptocurrency Dashboard</h1>
+    <p class="subtitle">
+      Real-time prices and market data for top cryptocurrencies
+    </p>
+  </header>
+
+  <main>
+    <table>
+      <thead>
+        <tr>
+          <th (click)="onSort('symbol')">Symbol ⇅</th>
+          <th (click)="onSort('name')">Name ⇅</th>
+          <th>Price (USD)</th>
+          <th>Market Cap (USD)</th>
+          <th>Favorite</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let crypto of paginatedCryptocurrencies">
+          <td>{{ crypto.symbol }}</td>
+          <td (click)="goToDetails(crypto.id)" class="crypto-name">
+            {{ crypto.name }}
+          </td>
+          <td>{{ crypto.priceUsd | currency : "USD" : "symbol" : "1.2-2" }}</td>
+          <td>
+            {{ crypto.marketCapUsd | currency : "USD" : "symbol" : "1.0-0" }}
+          </td>
+          <td>
+            <button (click)="toggleFavorite(crypto)" class="favorite-btn">
+              {{ crypto.isFavorite ? "★" : "☆" }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button
+        (click)="onPageChange(currentPage - 1)"
+        [disabled]="currentPage === 1"
+        class="page-btn"
+      >
+        Previous
+      </button>
+      <span class="page-info">Page {{ currentPage }}</span>
+      <button
+        (click)="onPageChange(currentPage + 1)"
+        [disabled]="currentPage * itemsPerPage >= cryptocurrencies.length"
+        class="page-btn"
+      >
+        Next
+      </button>
+    </div>
+  </main>
+</div>
