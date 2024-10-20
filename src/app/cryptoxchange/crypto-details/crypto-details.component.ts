@@ -14,6 +14,7 @@ import { registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { BehaviorSubject, Subject, combineLatest, takeUntil } from 'rxjs';
 import { LocalStorageService } from '../../services/local-storage.service';
+import { Cryptocurrency } from 'src/app/models/crypto.model';
 
 Chart.register(...registerables);
 
@@ -30,8 +31,8 @@ export class CryptoDetailsComponent
   @ViewChild('priceChart')
   priceChartCanvas!: ElementRef;
 
-  cryptoDetails: any;
-  chart: Chart | undefined;
+  cryptoDetails!: Cryptocurrency;
+  chart!: Chart;
   isFavorite = false;
 
   private priceData$ = new BehaviorSubject<any[]>([]);
@@ -99,7 +100,7 @@ export class CryptoDetailsComponent
     if (this.chart) {
       this.chart.destroy();
     }
-    const ctx = this.priceChartCanvas?.nativeElement.getContext('2d');
+    const ctx = this.priceChartCanvas?.nativeElement?.getContext('2d');
     this.chart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -140,10 +141,10 @@ export class CryptoDetailsComponent
 
   toggleFavorite() {
     const favorites = this.getFavoritesFromLocalStorage();
-    const index = favorites.indexOf(this.cryptoDetails.id);
+    const index = favorites.indexOf(this.cryptoDetails?.id);
 
     if (index === -1) {
-      favorites.push(this.cryptoDetails.id);
+      favorites.push(this.cryptoDetails?.id);
       this.isFavorite = true;
     } else {
       favorites.splice(index, 1);

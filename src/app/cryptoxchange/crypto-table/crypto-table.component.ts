@@ -4,15 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { LocalStorageService } from '../../services/local-storage.service';
-
-interface Cryptocurrency {
-  id: string;
-  symbol: string;
-  name: string;
-  priceUsd: string;
-  marketCapUsd: string;
-  isFavorite: boolean;
-}
+import { Cryptocurrency } from 'src/app/models/crypto.model';
 
 @Component({
   standalone: true,

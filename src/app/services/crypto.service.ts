@@ -3,7 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { Crypto } from '../models/crypto.model';
+import {
+  Cryptocurrency,
+  CryptoHistoryApiResponse,
+  CryptoIndexApiResponse,
+} from '../models/crypto.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -14,7 +18,7 @@ export class CryptoService {
   private priceUpdates = new BehaviorSubject<any>({});
 
   // Permanent cache variables
-  private cryptoDataCache: Crypto[] | null = null;
+  private cryptoDataCache: Cryptocurrency[] | null = null;
 
   constructor(private http: HttpClient) {
     this.wsSubject = webSocket(environment.wsUrl);
@@ -25,7 +29,7 @@ export class CryptoService {
   }
 
   // Fetch top 100 cryptocurrencies from API with permanent caching
-  getCryptoData(): Observable<Crypto[]> {
+  getCryptoData(): Observable<Cryptocurrency[]> {
     // If data is already cached, return it
     if (this.cryptoDataCache) {
       return of(this.cryptoDataCache);
@@ -46,19 +50,19 @@ export class CryptoService {
     }
   }
 
-  getCryptoDetails(id: string): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/${id}`);
+  getCryptoDetails(id: string): Observable<CryptoIndexApiResponse> {
+    return this.http.get<CryptoIndexApiResponse>(`${environment.apiUrl}/${id}`);
   }
 
-  getCryptoHistory(id: string): Observable<any> {
+  getCryptoHistory(id: string): Observable<CryptoHistoryApiResponse> {
     const end = Date.now();
     const start = end - 30 * 24 * 60 * 60 * 1000; // 30 days ago
-    return this.http.get(
+    return this.http.get<CryptoHistoryApiResponse>(
       `${environment.apiUrl}/${id}/history?interval=d1&start=${start}&end=${end}`
     );
   }
 
-  getPriceUpdates(): Observable<any> {
+  getPriceUpdates() {
     return this.priceUpdates.asObservable();
   }
 

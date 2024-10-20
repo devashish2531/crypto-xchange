@@ -72,7 +72,13 @@ describe('CryptoDetailsComponent', () => {
 
   it('should update favorites when toggleFavorite is called', () => {
     localStorageServiceMock.getItem.mockReturnValue('["1"]');
-    component.cryptoDetails = { id: '1' };
+    component.cryptoDetails = {
+      id: '1',
+      symbol: 'BTC',
+      name: 'bitcoin',
+      priceUsd: '234',
+      marketCapUsd: '123456789',
+    };
     component.checkIfFavorite('1');
 
     expect(component.isFavorite).toBe(true);
