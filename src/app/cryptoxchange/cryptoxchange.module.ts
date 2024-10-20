@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CryptoxchangeComponent } from './cryptoxchange.component';
-import { CryptoTableComponent } from './crypto-table/crypto-table.component';
-import { CryptoDetailsComponent } from './crypto-details/crypto-details.component';
 
 @NgModule({
   imports: [
@@ -15,12 +13,18 @@ import { CryptoDetailsComponent } from './crypto-details/crypto-details.componen
         children: [
           {
             path: '',
-            component: CryptoTableComponent,
+            loadComponent: () =>
+              import('./crypto-table/crypto-table.component').then(
+                (m) => m.CryptoTableComponent
+              ),
             pathMatch: 'full',
           },
           {
             path: 'details/:id',
-            component: CryptoDetailsComponent,
+            loadComponent: () =>
+              import('./crypto-details/crypto-details.component').then(
+                (m) => m.CryptoDetailsComponent
+              ),
           },
         ],
       },
