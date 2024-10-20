@@ -27,10 +27,12 @@ Chart.register(...registerables);
 export class CryptoDetailsComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @ViewChild('priceChart') priceChartCanvas!: ElementRef; // Added non-null assertion operator
+  @ViewChild('priceChart')
+  priceChartCanvas!: ElementRef;
+
   cryptoDetails: any;
   chart: Chart | undefined;
-  isFavorite: boolean = false; // To track if the current crypto is a favorite
+  isFavorite = false;
 
   private priceData$ = new BehaviorSubject<any[]>([]);
   private viewReady$ = new BehaviorSubject<boolean>(false);
@@ -52,7 +54,7 @@ export class CryptoDetailsComponent
     combineLatest([this.priceData$, this.viewReady$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([priceData, viewReady]) => {
-        if (priceData.length > 0 && viewReady) {
+        if (priceData.length && viewReady) {
           this.createChart(priceData);
         }
       });
@@ -70,31 +72,34 @@ export class CryptoDetailsComponent
     }
   }
 
-  loadCryptoDetails(id: string) {
+  private loadCryptoDetails(id: string) {
     this.cryptoService.getCryptoDetails(id).subscribe(
       (data: any) => {
         this.cryptoDetails = data.data;
-
-        this.cryptoService.getCryptoHistory(id).subscribe(
-          (data: any) => {
-            const priceData = data.data.map((item: any) => ({
-              x: new Date(item.time),
-              y: parseFloat(item.priceUsd),
-            }));
-            this.priceData$.next(priceData);
-          },
-          (error) => console.error('Error fetching crypto history:', error)
-        );
+        this.loadCryptoHistory(id);
       },
       (error) => console.error('Error fetching crypto details:', error)
     );
   }
 
-  createChart(priceData: any[]) {
+  private loadCryptoHistory(id: string) {
+    this.cryptoService.getCryptoHistory(id).subscribe(
+      (data: any) => {
+        const priceData = data.data.map((item: any) => ({
+          x: new Date(item.time),
+          y: parseFloat(item.priceUsd),
+        }));
+        this.priceData$.next(priceData);
+      },
+      (error) => console.error('Error fetching crypto history:', error)
+    );
+  }
+
+  private createChart(priceData: any[]) {
     if (this.chart) {
       this.chart.destroy();
     }
-    const ctx = this.priceChartCanvas.nativeElement.getContext('2d');
+    const ctx = this.priceChartCanvas?.nativeElement.getContext('2d');
     this.chart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -124,33 +129,27 @@ export class CryptoDetailsComponent
     });
   }
 
-  checkIfFavorite(id: string) {
-    const favorites = JSON.parse(
-      this.localStorageService.getItem('favorites') || '[]'
-    );
-
-    this.isFavorite = favorites?.includes(id) || false;
+  public checkIfFavorite(id: string) {
+    const favorites = this.getFavoritesFromLocalStorage();
+    this.isFavorite = favorites.includes(id);
   }
 
-  toggleFavourite() {
-    const favorites = JSON.parse(
-      this.localStorageService.getItem('favorites') || '[]'
-    );
+  private getFavoritesFromLocalStorage(): string[] {
+    return JSON.parse(this.localStorageService.getItem('favorites') || '[]');
+  }
+
+  toggleFavorite() {
+    const favorites = this.getFavoritesFromLocalStorage();
     const index = favorites.indexOf(this.cryptoDetails.id);
 
     if (index === -1) {
-      // Add to favorites
       favorites.push(this.cryptoDetails.id);
       this.isFavorite = true;
     } else {
-      // Remove from favorites
       favorites.splice(index, 1);
       this.isFavorite = false;
     }
 
-    // Save the updated favorites list to local storage
     this.localStorageService.setItem('favorites', JSON.stringify(favorites));
   }
-
-  addFavourite() {}
 }

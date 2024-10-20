@@ -23,8 +23,8 @@
   </header>
 
   <!-- Price & Stats Section -->
-  <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-    <div class="bg-white p-6 rounded-lg shadow-md">
+  <section class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+    <div class="bg-white p-6 rounded-lg shadow-md md:col-span-1">
       <h2 class="text-2xl font-semibold mb-4">Price Information</h2>
       <p class="text-gray-800 text-lg">
         <strong>Current Price:</strong>
@@ -49,7 +49,7 @@
     </div>
 
     <!-- Price History Chart -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="bg-white p-6 rounded-lg shadow-md md:col-span-3">
       <h2 class="text-2xl font-semibold mb-4">Price History (Last 30 Days)</h2>
       <canvas #priceChart class="w-full h-64"></canvas>
     </div>
@@ -87,7 +87,7 @@
     </h2>
     <button
       class="text-white py-3 px-6 rounded-lg text-lg"
-      (click)="toggleFavourite()"
+      (click)="toggleFavorite()"
       [ngClass]="{
         'bg-red-500 hover:bg-red-600': isFavorite,
         'bg-green-500 hover:bg-green-600': !isFavorite
