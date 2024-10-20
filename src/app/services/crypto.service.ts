@@ -4,13 +4,12 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { Crypto } from '../models/crypto.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CryptoService {
-  private apiUrl = 'https://api.coincap.io/v2/assets';
-  private wsUrl = 'wss://ws.coincap.io/prices?assets=';
   private wsSubject: WebSocketSubject<any> | null = null;
   private priceUpdates = new BehaviorSubject<any>({});
 
@@ -18,11 +17,11 @@ export class CryptoService {
   private cryptoDataCache: Crypto[] | null = null;
 
   constructor(private http: HttpClient) {
-    this.wsSubject = webSocket(this.wsUrl);
+    this.wsSubject = webSocket(environment.wsUrl);
   }
 
   getCryptocurrencies(): Observable<any> {
-    return this.http.get(`${this.apiUrl}?limit=100`);
+    return this.http.get(`${environment.apiUrl}?limit=100`);
   }
 
   // Fetch top 100 cryptocurrencies from API with permanent caching
@@ -32,7 +31,7 @@ export class CryptoService {
       return of(this.cryptoDataCache);
     } else {
       // Otherwise, fetch data from the API and cache it permanently
-      return this.http.get<any>(`${this.apiUrl}?limit=100`).pipe(
+      return this.http.get<any>(`${environment.apiUrl}?limit=100`).pipe(
         map((res) => {
           const cryptoData = res.data;
           // Cache the data permanently
@@ -48,14 +47,14 @@ export class CryptoService {
   }
 
   getCryptoDetails(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+    return this.http.get(`${environment.apiUrl}/${id}`);
   }
 
   getCryptoHistory(id: string): Observable<any> {
     const end = Date.now();
     const start = end - 30 * 24 * 60 * 60 * 1000; // 30 days ago
     return this.http.get(
-      `${this.apiUrl}/${id}/history?interval=d1&start=${start}&end=${end}`
+      `${environment.apiUrl}/${id}/history?interval=d1&start=${start}&end=${end}`
     );
   }
 
@@ -66,7 +65,7 @@ export class CryptoService {
   connectToWebSocket(symbols: string[]) {
     this.disconnectWebSocket();
     const assetsQuery = symbols.join(',');
-    this.wsSubject = webSocket(`${this.wsUrl}${assetsQuery}`);
+    this.wsSubject = webSocket(`${environment.wsUrl}${assetsQuery}`);
 
     this.wsSubject.subscribe(
       (message) => this.priceUpdates.next(message),

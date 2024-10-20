@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: 'https://api.coincap.io/v2/assets',
+  wsUrl: 'wss://ws.coincap.io/prices?assets=',
 };
 
 /*
