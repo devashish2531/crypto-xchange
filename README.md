@@ -1,4 +1,5 @@
-# CryptoXchange
+# CryptoXchange : 
+https://crypto-xchange-dev.netlify 
 
 CryptoXchange is a real-time cryptocurrency dashboard built with Angular, featuring dynamic and selective data fetching, pagination, sorting, and persistent favorites. It provides comprehensive coin details and pricing history, leveraging optimised WebSockets for live updates.
 
@@ -6,7 +7,6 @@ CryptoXchange is a real-time cryptocurrency dashboard built with Angular, featur
 
 ### Landing Page
 ![alt text](https://res.cloudinary.com/devashish/image/upload/v1729441380/CryptoXchange/currency-table_dejd14.png)
-
 
 
 - **Real-Time Cryptocurrency Data**: Fetch and display the top 100 cryptocurrencies in a dynamic table.
@@ -18,7 +18,8 @@ CryptoXchange is a real-time cryptocurrency dashboard built with Angular, featur
   - **Favorites Toggle**: Add/remove cryptocurrencies to favorites, which are persisted across sessions.
   - **Price Change Indication**: Visualize price changes with red/green updates (toast notifications).
   - **Link to Details**: Navigate to the detailed coin information by clicking on a currency.
-  - **Mobile Frindly UI**: 
+  - **Mobile Frindly UI**:
+  - **Code Optimisation**: Lazyloading of modules, Subscriptions (event listeners) cleanup, separation of concerns, Simplified logics, caching of API Data and several optimisations at code level
 ### Details Page
 
 ![alt text](https://res.cloudinary.com/devashish/image/upload/v1729441380/CryptoXchange/currency-details_o1jm72.png)
