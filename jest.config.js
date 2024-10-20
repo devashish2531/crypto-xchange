@@ -4,4 +4,5 @@ module.exports = {
     "^src/(.*)$": "<rootDir>/src/$1",
   },
   setupFilesAfterEnv: ["<rootDir>/jest.ts"],
+  testEnvironment: "jsdom",
 };
