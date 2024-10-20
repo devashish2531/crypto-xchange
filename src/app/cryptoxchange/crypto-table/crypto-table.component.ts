@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CryptoService } from '../services/crypto.service';
+import { CryptoService } from '../../services/crypto.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { LocalStorageService } from '../services/local-storage.service';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 interface Cryptocurrency {
   id: string;
@@ -58,7 +58,7 @@ export class CryptoTableComponent implements OnInit, OnDestroy {
         this.sortData();
         this.connectToWebSocket();
       },
-      (error) => console.error('Error fetching cryptocurrencies:', error)
+      (error: any) => console.error('Error fetching cryptocurrencies:', error)
     );
   }
 

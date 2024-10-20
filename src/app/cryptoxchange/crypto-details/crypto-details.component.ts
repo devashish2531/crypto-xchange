@@ -9,11 +9,11 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Chart } from 'chart.js';
-import { CryptoService } from '../services/crypto.service';
+import { CryptoService } from '../../services/crypto.service';
 import { registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { BehaviorSubject, Subject, combineLatest, takeUntil } from 'rxjs';
-import { LocalStorageService } from '../services/local-storage.service';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 Chart.register(...registerables);
 

@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CryptoxchangeComponent } from './cryptoxchange.component';
-import { CryptoTableComponent } from '../crypto-table/crypto-table.component';
-import { CryptoDetailsComponent } from '../crypto-details/crypto-details.component';
+import { CryptoTableComponent } from './crypto-table/crypto-table.component';
+import { CryptoDetailsComponent } from './crypto-details/crypto-details.component';
 
 @NgModule({
   imports: [
