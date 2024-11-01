@@ -17,6 +17,26 @@
   </div>
 </div>
 
+<!-- Mobile Sort Options -->
+<div class="md:hidden mb-4">
+  <div class="bg-white border border-gray-200 rounded-lg p-2">
+    <div class="grid grid-cols-2 gap-2">
+      <button
+        (click)="onSort('symbol')"
+        class="p-2 text-left hover:bg-gray-100 rounded"
+      >
+        Sort by Symbol ⇅
+      </button>
+      <button
+        (click)="onSort('name')"
+        class="p-2 text-left hover:bg-gray-100 rounded"
+      >
+        Sort by Name ⇅
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- Responsive Table -->
 <div class="overflow-x-auto">
   <table class="min-w-full bg-white border border-gray-200 hidden md:table">
@@ -67,21 +87,29 @@
   <div class="md:hidden">
     <div
       *ngFor="let crypto of paginatedCryptocurrencies"
-      class="bg-white border border-gray-200 rounded-lg p-4 mb-4"
+      class="bg-white border border-gray-200 rounded-lg p-4 mb-4 cursor-pointer hover:border-blue-500"
+      (click)="goToDetails(crypto.id)"
     >
-      <h2 class="text-xl font-semibold">
-        {{ crypto.name }} ({{ crypto.symbol }})
-      </h2>
-      <p class="text-gray-700">
-        Price: {{ crypto.priceUsd | currency : "USD" : "symbol" : "1.2-2" }}
-      </p>
-      <p class="text-gray-700">
-        Market Cap:
-        {{ crypto.marketCapUsd | currency : "USD" : "symbol" : "1.0-0" }}
-      </p>
-      <button (click)="toggleFavorite(crypto)" class="favorite-btn text-lg">
-        {{ crypto.isFavorite ? "★" : "☆" }}
-      </button>
+      <div class="flex justify-between items-start">
+        <div>
+          <h2 class="text-xl font-semibold">
+            {{ crypto.name }} ({{ crypto.symbol }})
+          </h2>
+          <p class="text-gray-700">
+            Price: {{ crypto.priceUsd | currency : "USD" : "symbol" : "1.2-2" }}
+          </p>
+          <p class="text-gray-700">
+            Market Cap:
+            {{ crypto.marketCapUsd | currency : "USD" : "symbol" : "1.0-0" }}
+          </p>
+        </div>
+        <button
+          (click)="$event.stopPropagation(); toggleFavorite(crypto)"
+          class="favorite-btn text-lg"
+        >
+          {{ crypto.isFavorite ? "★" : "☆" }}
+        </button>
+      </div>
     </div>
   </div>
 </div>
