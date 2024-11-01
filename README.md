@@ -1,27 +1,86 @@
-# CryptoXchange
+# CryptoXchange : 
+https://crypto-xchange-dev.netlify 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.7.
+CryptoXchange is a real-time cryptocurrency dashboard built with Angular, featuring dynamic and selective data fetching, pagination, sorting, and persistent favorites. It provides comprehensive coin details and pricing history, leveraging optimised WebSockets for live updates.
 
-## Development server
+## Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Landing Page
+![alt text](https://res.cloudinary.com/devashish/image/upload/v1729441380/CryptoXchange/currency-table_dejd14.png)
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **Real-Time Cryptocurrency Data**: Fetch and display the top 100 cryptocurrencies in a dynamic table.
+- **WebSockets for Live Updates**: View real-time updates for the top 10 coins visible in the current viewport.
+- **Table Functionalities**:
+  - **Pagination**: Navigate through 100 cryptocurrencies paginated to 10 curreny items per page.
+  - **Persistent Sorting**: Maintain the sorting order (name, price, market cap, symbol) even after data refresh.
+  - **Websockets**: Websockets which selectively fetch updated prices of 10 currency items in view to add interactivity with optimised performance 
+  - **Favorites Toggle**: Add/remove cryptocurrencies to favorites, which are persisted across sessions.
+  - **Price Change Indication**: Visualize price changes with red/green updates (toast notifications).
+  - **Link to Details**: Navigate to the detailed coin information by clicking on a currency.
+  - **Mobile Frindly UI**:
+  - **Code Optimisation**: Lazyloading of modules, Subscriptions (event listeners) cleanup, separation of concerns, Simplified logics, caching of API Data and several optimisations at code level
+### Details Page
 
-## Build
+![alt text](https://res.cloudinary.com/devashish/image/upload/v1729441380/CryptoXchange/currency-details_o1jm72.png)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- **Coin Details**: Display key information like market cap, price, and price history.
+- **Favorites Toggle**: Add/remove the cryptocurrency to/from favorites on this page.
+- **Price History**: Visualize the price trend over the past 30 days.
+- **Mobile Frindly UI**: 
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Testing
+![alt text](https://res.cloudinary.com/devashish/image/upload/v1729441390/CryptoXchange/tests_esjewg.png)
+- **Exhaustive Unit Testing**: Coverage of all major features using **Jest**.
 
-## Running end-to-end tests
+## Getting Started
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Local Development:
+ Clone the repository:
 
-## Further help
+```bash
+git clone https://github.com/yourusername/crypto-xchange.git
+cd crypto-xchange 
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Install dependencies:
+
+```bash
+npm install
+```
+Run the development server:
+```bash
+ng serve
+```
+Open http://localhost:4200/ to view it in the browser.
+
+### To build the project for production:
+
+```bash
+ng build
+```
+The production-ready files will be stored in the dist/ directory.
+
+### To Test the project:
+Run unit tests using Jest:
+```bash
+npm run test
+```
+
+
+For continuous testing while developing:
+
+```bash
+npm run test:watch
+
+```
+To generate a code coverage report:
+
+```bash
+npm run test:coverage
+
+
+```
+
+
